@@ -5,19 +5,6 @@ import { Card } from "antd";
 import { Monster } from "../../types/Monster";
 import { Attacks } from "../../types/Attacks";
 
-// type Monster = {
-//   id: number;
-//   name: string;
-//   health: number;
-//   attacks: Attacks[];
-// };
-
-// type Attacks = {
-//   id: number;
-//   name: string;
-//   dmg: number;
-// };
-
 function MonsterCard() {
   const { monsters, setMonsters } = useContext(MonsterContext);
 
