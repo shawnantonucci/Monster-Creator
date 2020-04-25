@@ -24,7 +24,7 @@ function MonsterCard() {
     setMonsters([...monsters, monster]);
   };
 
-  const testCreateMonster = {
+  const testCreateMonster: Monster = {
     id: 3,
     name: "Test Monster",
     health: 50,
@@ -49,7 +49,7 @@ function MonsterCard() {
             <p> HP: {monster.health} </p>
             <div className={styles.attackContainer}>
               <p>Attacks</p>
-              {monster.attacks.map((attack: any) => {
+              {monster.attacks.map((attack: Attacks) => {
                 return (
                   <div>
                     <p>
