@@ -1,0 +1,15 @@
+.cardContainer {
+  width: 25%;
+  height: 25;
+  border: 1px solid black;
+  margin: 0 auto;
+  margin-bottom: 10px;
+}
+
+.attackContainer {
+  width: 80%;
+  height: 25%;
+  background-color: aqua;
+  margin: 0 auto;
+  padding: 1px;
+}

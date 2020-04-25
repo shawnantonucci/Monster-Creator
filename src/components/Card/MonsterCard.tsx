@@ -1,0 +1,71 @@
+import React, { useState, useContext } from "react";
+import { MonsterContext } from "../../context/MonsterProvider";
+import styles from "./Card.module.css";
+import { Card } from "antd";
+
+type Monster = {
+  id: number;
+  name: string;
+  health: number;
+  attacks: Attacks[];
+};
+
+type Attacks = {
+  id: number;
+  name: string;
+  dmg: number;
+};
+
+function MonsterCard() {
+  const { monsters, setMonsters } = useContext(MonsterContext);
+
+  const createMonster = (monster: any) => () => {
+    console.log(monster);
+    setMonsters([...monsters, monster]);
+  };
+
+  const testCreateMonster = {
+    id: 3,
+    name: "Test Monster",
+    health: 50,
+    attacks: [
+      {
+        id: 0,
+        name: "Test Attacl",
+        dmg: 5,
+      },
+    ],
+  };
+
+  return (
+    <div>
+      {monsters.map((monster: Monster) => {
+        console.log(monster);
+        return (
+          <Card hoverable className={styles.cardContainer}>
+            <p>
+              #{monster.id} - {monster.name}
+            </p>
+            <p> HP: {monster.health} </p>
+            <div className={styles.attackContainer}>
+              <p>Attacks</p>
+              {monster.attacks.map((attack: any) => {
+                return (
+                  <div>
+                    <p>
+                      ID# {attack.id} - Name: {attack.name} - Damage:{" "}
+                      {attack.dmg}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </Card>
+        );
+      })}
+      <button onClick={createMonster(testCreateMonster)}>Add Monster</button>
+    </div>
+  );
+}
+
+export default MonsterCard;
