@@ -20,7 +20,7 @@ function MonsterCard() {
     attacks: [
       {
         id: 0,
-        name: "Test Attacl",
+        name: "Test Attack",
         dmg: 5,
       },
     ],
