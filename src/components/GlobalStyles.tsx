@@ -1,10 +1,5 @@
 import { createGlobalStyle } from "styled-components";
 
-// interface DefaultTheme {
-//   body: string
-//   text: string
-// }
-
 export const GlobalStyles  = createGlobalStyle`
   body {
     background: ${({ theme }) => theme.body};

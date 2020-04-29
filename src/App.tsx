@@ -10,7 +10,7 @@ import { MonsterProvider } from "./context/MonsterProvider";
 import CardContainer from "./components/CardContainer/CardContainer";
 
 function App() {
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState("dark");
   const themeToggler = () => {
     theme === "light" ? setTheme("dark") : setTheme("light");
   };
