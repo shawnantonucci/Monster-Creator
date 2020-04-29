@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { MonsterContext } from "../../context/MonsterProvider";
 import styles from "./Card.module.css";
 import { Card } from "antd";
