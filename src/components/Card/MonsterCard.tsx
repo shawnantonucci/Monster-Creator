@@ -26,7 +26,8 @@ function MonsterCard() {
   const [monsters, setMonsters] = useState();
 
   useEffect(() => {
-    setMonsters(data);
+    // console.log(data && Object.values(data), "DATA")
+    setMonsters(data && Object.values(data.monsters));
   }, [data]);
 
   if (loading) return <p>Loading...</p>;
@@ -37,30 +38,25 @@ function MonsterCard() {
   return (
     <>
       {monsters &&
-        Object.keys(monsters).map((key, index) => {
+        monsters.map((monster: any) => {
+          console.log(monster, "monster mapping");
           return (
-            <Card
-              key={monsters[key][index].id}
-              hoverable
-              className={styles.cardContainer}
-            >
+            <Card key={monster.id} hoverable className={styles.cardContainer}>
               <p>
-                #{monsters[key][index].id} - {monsters[key][index].name}
+                #{monster.id} - {monster.name}
               </p>
-              <p> HP: {monsters[key][index].health} </p>
+              <p> HP: {monster.health} </p>
               <div className={styles.attackContainer}>
                 <p>Attacks</p>
-
-                {monsters &&
-                  monsters[key][index].attacks.map((attack: any) => {
-                    return (
-                      <div key={monsters[key][index].id}>
-                        <p>Attack ID: {attack.id}</p>
-                        <p>Name: {attack.name}</p>
-                        <p>Damage: {attack.dmg}</p>
-                      </div>
-                    );
-                  })}
+                {monster.attacks.map((attack: any) => {
+                  return (
+                    <div key={monster.id}>
+                      <p>Attack ID: {attack.id}</p>
+                      <p>Name: {attack.name}</p>
+                      <p>Damage: {attack.dmg}</p>
+                    </div>
+                  );
+                })}
               </div>
             </Card>
           );
