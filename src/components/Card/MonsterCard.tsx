@@ -1,59 +1,71 @@
-import React, { useContext } from "react";
-import { MonsterContext } from "../../context/MonsterProvider";
+import React, { useState, useEffect } from "react";
+
+import { useQuery } from "@apollo/react-hooks";
+import gql from "graphql-tag";
+
 import styles from "./Card.module.css";
 import { Card } from "antd";
-import { Monster } from "../../types/Monster";
-import { Attacks } from "../../types/Attacks";
+
+const GET_MONSTER_INFO = gql`
+  {
+    monsters {
+      id
+      name
+      health
+      attacks {
+        id
+        name
+        dmg
+      }
+    }
+  }
+`;
 
 function MonsterCard() {
-  const { monsters, setMonsters } = useContext(MonsterContext);
+  const { data, loading, error } = useQuery(GET_MONSTER_INFO);
+  const [monsters, setMonsters] = useState();
 
-  const createMonster = (monster: any) => () => {
-    console.log(monster);
-    setMonsters([...monsters, monster]);
-  };
+  useEffect(() => {
+    setMonsters(data);
+  }, [data]);
 
-  const testCreateMonster: Monster = {
-    id: 3,
-    name: "Test Monster",
-    health: 50,
-    attacks: [
-      {
-        id: 0,
-        name: "Test Attack",
-        dmg: 5,
-      },
-    ],
-  };
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error</p>;
+
+  console.log(monsters, "monsters");
 
   return (
-    <div>
-      {monsters.map((monster: Monster) => {
-        console.log(monster);
-        return (
-          <Card hoverable className={styles.cardContainer}>
-            <p>
-              #{monster.id} - {monster.name}
-            </p>
-            <p> HP: {monster.health} </p>
-            <div className={styles.attackContainer}>
-              <p>Attacks</p>
-              {monster.attacks.map((attack: Attacks) => {
-                return (
-                  <div>
-                    <p>
-                      ID# {attack.id} - Name: {attack.name} - Damage:{" "}
-                      {attack.dmg}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-          </Card>
-        );
-      })}
-      <button onClick={createMonster(testCreateMonster)}>Add Monster</button>
-    </div>
+    <>
+      {monsters &&
+        Object.keys(monsters).map((key, index) => {
+          return (
+            <Card
+              key={monsters[key][index].id}
+              hoverable
+              className={styles.cardContainer}
+            >
+              <p>
+                #{monsters[key][index].id} - {monsters[key][index].name}
+              </p>
+              <p> HP: {monsters[key][index].health} </p>
+              <div className={styles.attackContainer}>
+                <p>Attacks</p>
+
+                {monsters &&
+                  monsters[key][index].attacks.map((attack: any) => {
+                    return (
+                      <div key={monsters[key][index].id}>
+                        <p>Attack ID: {attack.id}</p>
+                        <p>Name: {attack.name}</p>
+                        <p>Damage: {attack.dmg}</p>
+                      </div>
+                    );
+                  })}
+              </div>
+            </Card>
+          );
+        })}
+    </>
   );
 }
 
