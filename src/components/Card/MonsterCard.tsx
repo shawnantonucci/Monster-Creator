@@ -13,7 +13,6 @@ const GET_MONSTER_INFO = gql`
       name
       health
       attacks {
-        id
         name
         dmg
       }
@@ -47,7 +46,6 @@ function MonsterCard() {
                 {monster.attacks.map((attack: any) => {
                   return (
                     <div key={monster.id}>
-                      <p>Attack ID: {attack.id}</p>
                       <p>Name: {attack.name}</p>
                       <p>Damage: {attack.dmg}</p>
                     </div>

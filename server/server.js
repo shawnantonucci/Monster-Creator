@@ -6,41 +6,37 @@ const cors = require("cors");
 
 const monsters = [
   {
-    id: 0,
+    id: "monster-1",
     name: "Monster 1",
     health: 50,
     attacks: [
       {
-        id: 0,
         name: "Attack 1",
         dmg: 5,
       },
     ],
   },
   {
-    id: 1,
+    id: "monster-2",
     name: "Monster 2",
     health: 100,
     attacks: [
       {
-        id: 1,
         name: "Attack 2",
         dmg: 10,
       },
     ],
   },
   {
-    id: 2,
+    id: "monster-3",
     name: "Monster 3",
     health: 150,
     attacks: [
       {
-        id: 1,
         name: "Attack 2",
         dmg: 10,
       },
       {
-        id: 2,
         name: "Attack 3",
         dmg: 20,
       },
@@ -50,21 +46,44 @@ const monsters = [
 
 const typeDefs = `
   type Query { monsters: [Monster] }
+
   type Monster { 
-    id: Int, 
-    name: String,
-    health: Int,
-    attacks: [Attacks]
+    id: ID!
+    name: String!,
+    health: Int!,
+    attacks: [Attacks!]!
   }
   type Attacks {
-    id: Int, 
-    name: String,
-    dmg: Int,
+    name: String!,
+    dmg: Int!,
+  }
+
+  input attackInput {
+    name: String!,
+    dmg: Int!
+  }
+
+  type Mutation {
+    createMonster(name: String!, health: Int!, attacks: [attackInput]!): Monster
   }
 `;
 
+let idCount = monsters.length
+
 const resolvers = {
   Query: { monsters: () => monsters },
+  Mutation: {
+    createMonster: (parent, args) => {
+       const newMonster = {
+        id: `monster-${idCount++}`,
+        name: args.name,
+        health: args.health,
+        attacks: args.attacks
+      }
+      monsters.push(newMonster)
+      return newMonster
+    }
+  },
 };
 
 const schema = makeExecutableSchema({
