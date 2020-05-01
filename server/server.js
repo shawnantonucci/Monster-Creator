@@ -44,8 +44,15 @@ const monsters = [
   },
 ];
 
+const users = [
+  {
+    id: "shawn12345",
+    displayName: "shawn",
+  },
+];
+
 const typeDefs = `
-  type Query { monsters: [Monster] }
+  type Query { monsters: [Monster], users: [User]  }
 
   type Monster { 
     id: ID!
@@ -53,9 +60,13 @@ const typeDefs = `
     health: Int!,
     attacks: [Attacks!]!
   }
+  type User { 
+    id: ID!
+    displayName: String!
+  }
   type Attacks {
     name: String!,
-    dmg: Int!,
+    dmg: Int!
   }
 
   input attackInput {
@@ -65,24 +76,34 @@ const typeDefs = `
 
   type Mutation {
     createMonster(name: String!, health: Int!, attacks: [attackInput]!): Monster
+    createUser(displayName: String!): User
   }
 `;
 
-let idCount = monsters.length
+let idCountMonster = monsters.length;
+let idCountUser = users.length;
 
 const resolvers = {
-  Query: { monsters: () => monsters },
+  Query: { monsters: () => monsters, users: () => users },
   Mutation: {
     createMonster: (parent, args) => {
-       const newMonster = {
-        id: `monster-${idCount++}`,
+      const newMonster = {
+        id: `monster-${idCountMonster++}`,
         name: args.name,
         health: args.health,
-        attacks: args.attacks
-      }
-      monsters.push(newMonster)
-      return newMonster
-    }
+        attacks: args.attacks,
+      };
+      monsters.push(newMonster);
+      return newMonster;
+    },
+    createUser: (parent, args) => {
+      const newUser = {
+        id: `user-${idCountUser++}`,
+        displayName: args.displayName,
+      };
+      users.push(newUser);
+      return newUser;
+    },
   },
 };
 
