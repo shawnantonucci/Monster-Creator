@@ -2,30 +2,47 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const { graphqlExpress, graphiqlExpress } = require("apollo-server-express");
 const { makeExecutableSchema } = require("graphql-tools");
-const cors = require('cors');
+const cors = require("cors");
 
 const monsters = [
   {
     id: 0,
-    name: "Monster1",
+    name: "Monster 1",
     health: 50,
     attacks: [
       {
         id: 0,
-        name: "Attack1",
+        name: "Attack 1",
         dmg: 5,
       },
     ],
   },
   {
     id: 1,
-    name: "Monster2",
+    name: "Monster 2",
     health: 100,
     attacks: [
       {
         id: 1,
-        name: "Attack2",
+        name: "Attack 2",
         dmg: 10,
+      },
+    ],
+  },
+  {
+    id: 2,
+    name: "Monster 3",
+    health: 150,
+    attacks: [
+      {
+        id: 1,
+        name: "Attack 2",
+        dmg: 10,
+      },
+      {
+        id: 2,
+        name: "Attack 3",
+        dmg: 20,
       },
     ],
   },

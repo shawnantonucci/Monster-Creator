@@ -26,20 +26,16 @@ function MonsterCard() {
   const [monsters, setMonsters] = useState();
 
   useEffect(() => {
-    // console.log(data && Object.values(data), "DATA")
-    setMonsters(data && Object.values(data.monsters));
+    setMonsters(data && Object.values(data.monsters))
   }, [data]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error</p>;
 
-  console.log(monsters, "monsters");
-
   return (
     <>
       {monsters &&
         monsters.map((monster: any) => {
-          console.log(monster, "monster mapping");
           return (
             <Card key={monster.id} hoverable className={styles.cardContainer}>
               <p>

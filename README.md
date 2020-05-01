@@ -5,3 +5,5 @@
 3. cd server
 4. npm install
 5. npm start ```To start the server```
+
+http://localhost:4000/graphiql ```For graphql playground```
