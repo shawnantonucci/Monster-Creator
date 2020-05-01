@@ -6,7 +6,7 @@ const cors = require("cors");
 
 const monsters = [
   {
-    id: "monster-1",
+    id: "monster-0",
     name: "Monster 1",
     health: 50,
     attacks: [
@@ -17,7 +17,7 @@ const monsters = [
     ],
   },
   {
-    id: "monster-2",
+    id: "monster-1",
     name: "Monster 2",
     health: 100,
     attacks: [
@@ -28,7 +28,7 @@ const monsters = [
     ],
   },
   {
-    id: "monster-3",
+    id: "monster-2",
     name: "Monster 3",
     health: 150,
     attacks: [
