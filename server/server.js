@@ -1,11 +1,8 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const { graphqlExpress, graphiqlExpress } = require("apollo-server-express");
-const { makeExecutableSchema } = require("graphql-tools");
-const cors = require("cors");
-const jwt = require("jsonwebtoken");
 
-const JWT_SECRET = "makethislongandrandom";
+const { ApolloServer } = require('apollo-server');
+const { makeExecutableSchema } = require("graphql-tools");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
 const monsters = [
   {
@@ -24,7 +21,8 @@ const monsters = [
 const users = [
   {
     id: "shawn12345",
-    name: "shawn",
+    username: "shawn",
+    password: "$2a$10$XhbJkTKWA67dQyhwvglAOeEfmr5Hl3Z9bZjHGQByShVRm41OL4Ew."
   },
 ];
 
@@ -44,8 +42,9 @@ const typeDefs = `
     attacks: [Attacks]
   }
   type User { 
-    id: ID
-    name: String
+    id: ID!
+    username: String
+    password: String
   }
   type Attacks {
     name: String
@@ -57,28 +56,34 @@ const typeDefs = `
     dmg: Int
   }
 
+  type LoginResponse {
+    token: String
+    user: User
+  }
+
+  type LogoutResponse {
+    token: String
+  }
+
   type Mutation {
     createMonster(name: String, health: Int, attacks: [attackInput]): Monster
-    signup(id: String, name: String): User
+    register(username: String!, password: String!): User!
+    login(username: String!, password: String!): LoginResponse!
   }
 `;
 
 let idCountMonster = monsters.length;
+let idCountUser = users.length;
 
 const resolvers = {
   Query: {
     monsters: () => monsters,
     monster: (_, { id }) => monsters.find((monster) => monster.id === id),
-    users: () => users,
-    user: (_, { id }) => users.find((user) => user.id === id),
-    login(_, { username }) {
-      const user = users.find((user) => user.name === username);
-      if (!user) {
-        throw Error("username was incorrect");
-      }
-      const token = jwt.sign({ id: user.id }, JWT_SECRET);
-      return token;
-    },
+    users: (parent, args, context) => {
+      if (!context.user) throw new Error("Invalid Information")
+     
+      return users;
+     }
   },
   Mutation: {
     createMonster: (parent, args) => {
@@ -91,29 +96,76 @@ const resolvers = {
       monsters.push(newMonster);
       return newMonster;
     },
-    signup(_, { id, name }) {
-      const user = { id, name };
-      const match = users.find((user) => user.name === name);
+    register: async (_, { username, password }) => {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const user = {
+        id: `user-${idCountUser++}`,
+        username,
+        password: hashedPassword,
+      };
+      const match = users.find((user) => user.username === username);
       if (match) throw Error("This username already exists");
       users.push(user);
       return user;
     },
+    login: async (_, { username, password }) => {
+      const user = users.find((user) => user.username === username);
+
+      if (!user) {
+        throw new Error("Invalid Login");
+      }
+
+      const passwordMatch = await bcrypt.compare(password, user.password);
+
+      if (!passwordMatch) {
+        throw new Error("Invalid Login");
+      }
+
+      const token = jwt.sign(
+        {
+          id: user.id,
+          username: user.username,
+        },
+        "my-secret-from-env-file-in-prod",
+        {
+          expiresIn: "30d", // token will expire in 30days
+        }
+      );
+      return {
+        token,
+        user,
+      };
+    },
   },
 };
+
+const getUser = token => {
+  try {
+    if (token) {
+      return jwt.verify(token, 'my-secret-from-env-file-in-prod')
+    }
+    return null
+  } catch (err) {
+    return null
+  }
+}
 
 const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
 });
 
-const app = express();
 
-app.use(cors());
+const app = new ApolloServer({
+  schema,
+  context: ({ req }) => {
+    const token = req.headers.authorization || '';
+    const user = getUser(token);
 
-app.use("/graphql", bodyParser.json(), graphqlExpress({ schema }));
-
-app.use("/graphiql", graphiqlExpress({ endpointURL: "/graphql" }));
-
+    return { user };
+  },
+ });
+ 
 app.listen(4000, () => {
   console.log("Go to http://localhost:4000/graphiql to run queries!");
 });
