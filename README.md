@@ -11,16 +11,16 @@ http://localhost:4000/graphiql ```For graphql playground```
 ## Mutations
 
 ``` Register ```
-
+```
 mutation {
   register(username: "test", password: "123") {
     username
     password
   }
 }
-
+```
 ``` Login ```
-
+```
 mutation {
   login(username: "test", password: "123") {
     token
@@ -31,9 +31,9 @@ mutation {
     }
   }
 }
-
+```
 ``` View all users ```
-
+```
 {
   users {
     id
@@ -41,9 +41,10 @@ mutation {
     password
   }
 }
-
+```
 ## Header info
-
+```
 {
   "authorization": "token"
 }
+```
