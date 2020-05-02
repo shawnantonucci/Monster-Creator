@@ -61,10 +61,6 @@ const typeDefs = `
     user: User
   }
 
-  type LogoutResponse {
-    token: String
-  }
-
   type Mutation {
     createMonster(name: String, health: Int, attacks: [attackInput]): Monster
     register(username: String!, password: String!): User!
