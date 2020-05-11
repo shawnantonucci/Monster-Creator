@@ -59,7 +59,7 @@ const LoginForm = ({ setLoginOrSignup, loginOrSignup }: any) => {
             Log in
           </Button>
           Or{" "}
-          <a onClick={() => setLoginOrSignup(!loginOrSignup)}>register now!</a>
+          <p onClick={() => setLoginOrSignup(!loginOrSignup)}>register now!</p>
         </Form.Item>
       </Form>
     </div>
