@@ -8,9 +8,11 @@ import "./App.css";
 
 import { MonsterProvider } from "./context/MonsterProvider";
 import CardContainer from "./components/CardContainer/CardContainer";
+import Login from "./views/Login/Login";
 
 function App() {
   const [theme, setTheme] = useState("dark");
+  
   const themeToggler = () => {
     theme === "light" ? setTheme("dark") : setTheme("light");
   };
@@ -21,6 +23,7 @@ function App() {
         <>
           <GlobalStyles />
           <div className="App">
+            <Login />
             <CardContainer />
             <button onClick={themeToggler}>Switch Theme</button>
           </div>
